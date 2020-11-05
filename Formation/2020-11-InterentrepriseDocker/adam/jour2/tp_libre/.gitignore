@@ -6,5 +6,5 @@
 ._.DS_Store
 .DS_Store
 
-# Ignore development settings
-development.services.yml
+# Ignore db data folder
+db_data

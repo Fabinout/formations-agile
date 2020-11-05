@@ -1,17 +1,41 @@
 version: '3'
 services:
   db:
-    image: mysql:latest
+    image: maria/10.5.7-focal
     restart: always
-    container_name: myphpapp-db
+    container_name: maria
     environment:
-      MYSQL_ROOT_PASSWORD: somepass
-      MYSQL_DATABASE: somedatabase
+      MYSQL_ROOT_PASSWORD: maria
+      MYSQL_DATABASE: test
     volumes:
-    - ./data:/var/lib/mysql
+      - ./db_data:/var/lib/mysql
+      - ./docker_config/maria:/etc/mysql/conf.d
 
-  dbclient:
-    image: mysql:latest
-    depends_on:
-      - db
-    command: mysql -uroot -psomepass -hdb
+#Access CLI:
+#docker run -it --rm mariadb mysql -hsome-mariadb -uexample-user -p
+
+#to dump DB
+#docker exec maria sh -c 'exec mysqldump -uroot -pmaria test' > $PWD/dump.sql
+
+#to restore DB
+#docker exec -i maria sh -c 'exec mysql -uroot -pmaria test' < $PWD/dump.sql
+
+  adminer:
+    image: adminer
+    container_name: adminer
+    restart: always
+    ports:
+      - 666:8080
+
+  Nginx:
+    image:
+
+  php:
+    image:
+
+  mailhog:
+    image: mailhog/mailhog
+    container_name: mailhog
+
+  redis:
+    image:
