@@ -29,3 +29,5 @@ web/robots.txt
 # Ignore  restore site
 web/sites/sites.php
 web/sites/restore
+/.editorconfig
+/.gitattributes
