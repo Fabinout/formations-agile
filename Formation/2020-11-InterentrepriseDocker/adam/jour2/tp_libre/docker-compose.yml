@@ -1,7 +1,7 @@
 version: '3'
 services:
   db:
-    image: maria/10.5.7-focal
+    image: mariadb:focal
     restart: always
     container_name: maria
     environment:
@@ -28,14 +28,40 @@ services:
       - 666:8080
 
   Nginx:
-    image:
+    image: wodby/nginx:latest
+    container_name: nginx
+    ports:
+      - "8080:80"
+    depends_on:
+      - php
+    environment:
+      NGINX_STATIC_OPEN_FILE_CACHE: "off"
+      NGINX_ERROR_LOG_LEVEL: debug
+      NGINX_BACKEND_HOST: php
+      NGINX_SERVER_ROOT: /var/www/html/web
+      NGINX_VHOST_PRESET: drupal9
+      #NGINX_DRUPAL_FILE_PROXY_URL: https://prod.com
+    volumes:
+      - ./src/:/var/www/html
 
   php:
-    image:
+    image: wodby/drupal-php:7.4
+    container_name: php
+    environment:
+      PHP_SENDMAIL_PATH: /usr/sbin/sendmail -t -i -S mailhog:1025
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_USER: root
+      DB_PASSWORD: maria
+      DB_NAME: test
+      DB_DRIVER: mysql
+    volumes:
+      - ./src/:/var/www/html
 
   mailhog:
     image: mailhog/mailhog
     container_name: mailhog
 
   redis:
-    image:
+    container_name: redis
+    image: wodby/redis:latest
