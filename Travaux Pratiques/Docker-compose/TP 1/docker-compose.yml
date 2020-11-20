@@ -3,7 +3,13 @@ version: '3'
 services:
   phpapp:
     ports:
-      - "8080:80"
+      - "80"
+    build:
+      context: ./
+      dockerfile: Dockerfile
+  phpapp2:
+    ports:
+      - "80"
     build:
       context: ./
       dockerfile: Dockerfile
