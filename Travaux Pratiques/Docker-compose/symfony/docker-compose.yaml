@@ -5,6 +5,7 @@ services:
     restart: 'no'
     image: composer:latest
     command: install
+    user: '1000:1000'
     volumes:
       - .:/app
 

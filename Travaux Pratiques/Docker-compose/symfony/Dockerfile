@@ -16,5 +16,3 @@ RUN mkdir -p /var/log/nginx/symfony
 
 WORKDIR /var/www/html/symfony
 COPY --from=composer --chown=nobody /app /var/www/html/symfony
-
-RUN chown -R nobody.nobody /var/www/html
