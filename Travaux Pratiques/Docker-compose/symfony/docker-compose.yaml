@@ -1,0 +1,47 @@
+version: '3.7'
+
+services:
+  composer:
+    restart: 'no'
+    image: composer:latest
+    command: install
+    user: '1000:1000'
+    volumes:
+      - .:/app
+
+  symfony-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: symfony-app:latest
+    container_name: "symfony-app"
+    ports:
+      - 80:8080
+    volumes:
+      - .:/var/www/html/symfony
+    networks:
+      - app-network
+    depends_on:
+      - symfony-mysql
+      - composer
+
+  symfony-mysql:
+    image: mysql:5
+    container_name: "symfony-mysql"
+    stop_grace_period: 30s
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: symfony
+      MYSQL_USER: symfony
+      MYSQL_PASSWORD: symfony
+    volumes:
+      - mysql-volume:/var/lib/mysql
+    networks:
+      - app-network
+
+volumes:
+  mysql-volume: ~
+
+networks:
+  app-network:
+    driver: bridge
